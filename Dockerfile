@@ -1,9 +1,8 @@
 FROM node:18-slim
 
-# Cài Chrome headless (dành cho Puppeteer)
+# Cài Chrome headless (để Puppeteer hoạt động)
 RUN apt-get update && apt-get install -y \
-    wget \
-    ca-certificates \
+    chromium \
     fonts-liberation \
     libappindicator3-1 \
     libasound2 \
@@ -19,13 +18,13 @@ RUN apt-get update && apt-get install -y \
     libxdamage1 \
     libxrandr2 \
     xdg-utils \
-    chromium \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 COPY . .
-RUN npm install
+
+RUN npm install \
+    && npm run build
 
 ENV PORT=3000
 EXPOSE 3000
